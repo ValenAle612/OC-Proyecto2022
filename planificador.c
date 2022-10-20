@@ -30,7 +30,7 @@ void ReducirHorasManejo(){
 
 }
 
-void main(){
+void main(int argc, char *argv[]){
 
 }
 
