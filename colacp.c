@@ -29,17 +29,6 @@ TColaCP crear_cola_cp(int (*f)(TEntrada, TEntrada)){
 }
 
 /**
-    función que retorna la prioridad
-    Devuelve -1 si la clave de la entrada como primer argumento
-    tiene menor prioridad que la clave de la entrada del segundo argumento,
-    0 si la prioridad es la misma, y 1 si la
-    prioridad es mayor.
-*/
-int f( TEntrada te1 , TEntrada te2){
-
-}
-
-/**
     Agrega la entrada a la cola.
     -> Retorna verdadero si procede con éxito
     -> Falso, caso contrario.
