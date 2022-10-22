@@ -30,10 +30,12 @@ int cp_insertar(TColaCP cola, TEntrada entr){
     int p, inserte = FALSE;
     TNodo * n, * actual, * aux;
 
+    //hay que chequear si es una entrada válida
     n = malloc(sizeof(struct nodo));
     (*n) -> entrada = entr;
 
     actual = cola -> raiz;
+   //hay que chequear si esta vacia
 
     while(!inserte){
 
@@ -42,15 +44,15 @@ int cp_insertar(TColaCP cola, TEntrada entr){
         switch( p ){//si tiene menor prioridad va en el hizq sino en el der hay que acomodar
 
             case -1:// entrada entr tiene menor prioridad que la entrada actual
-                if( (*actual) -> hijo_izquierdo != NULL && (*actual) -> hijo_derecho != NULL ){
-
+                if( (*actual) -> hijo_izquierdo != POS_NULA && (*actual) -> hijo_derecho != POS_NULA ){
                     actual = (*actual) -> hijo_izquierdo;
-
                 }else{
-                    if( (*actual) -> hijo_izquierdo == NULL ){
+                    if( (*actual) -> hijo_izquierdo == POS_NULA ){
 
                         (*actual) -> hijo_izquierdo = n;
                         (*n) -> padre = actual;
+
+                        inserte = TRUE;
                                               //        actual.hi
                     }else{ //tengo que balancear --> n_/         \_actual
 
@@ -60,13 +62,33 @@ int cp_insertar(TColaCP cola, TEntrada entr){
                         (*actual) -> padre = aux;
                         (*actual) -> hijo_izquierdo = NULL;
 
+                        inserte = TRUE;
+
                      }
                 }
                 break;
             case 0:// entradas actual y entr tienen la misma prioridad
 
             case 1:// entrada entr tiene mayor prioridad que la entrada actual
+                if( (*actual) -> hijo_izquierdo != POS_NULA && (*actual) -> hijo_derecho != POS_NULA ){
+                    actual = (*actual) -> hijo_derecho;
+                }else{
+                    if( (*actual) -> hijo_izquierdo != POS_NULA ){ // && (*actual) -> hijo_derecho == NULL ){
+                        (*actual) -> hijo_derecho = n;
+                        (*n) -> padre = actual;
 
+                        inserte = TRUE;
+                                            //               n
+                    }else{//tengo que balancear -->  actual_/    pq n tiene mayor prioridad que el nodo actual
+
+                        aux = (*actual) -> padre;
+                        (*n) -> padre = aux;
+                        (*n) -> hijo_izquierdo = actual;
+                        (*actual) -> padre = n;
+
+                        inserte = TRUE;
+                    }
+                }
 
         };
     }
