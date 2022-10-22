@@ -28,7 +28,7 @@ TColaCP crear_cola_cp(int (*f)(TEntrada, TEntrada)){
 int cp_insertar(TColaCP cola, TEntrada entr){
 
     int p, inserte = FALSE;
-    TNodo * n, * actual;
+    TNodo * n, * actual, * aux;
 
     n = malloc(sizeof(struct nodo));
     (*n) -> entrada = entr;
@@ -42,26 +42,31 @@ int cp_insertar(TColaCP cola, TEntrada entr){
         switch( p ){//si tiene menor prioridad va en el hizq sino en el der hay que acomodar
 
             case -1:// entrada entr tiene menor prioridad que la entrada actual
-                if( (*actual) -> hijo_izquierdo == NULL && (*actual) -> hijo_derecho != NULL ){
-                    (*n)-> padre = actual;
-                    (*actual) -> hijo_izquierdo = n;
-                    inserte = TRUE;
+                if( (*actual) -> hijo_izquierdo != NULL && (*actual) -> hijo_derecho != NULL ){
+
+                    actual = (*actual) -> hijo_izquierdo;
+
                 }else{
-                    if( (*actual) -> hijo_derecho == NULL ){//nunca se da el caso que actual tenga h_izq pero no h_der (arbol balancead)
-                       //hay que poner n como hijo del padre de actual (swipe n y actual)
-                       (*n) -> hijo_derecho = actual;//n es raiz del sub arbol con hijo der actual
-                        inserte = TRUE;
-                    }else{
-                        actual = (*actual) -> hijo_izquierdo;
-                    }
+                    if( (*actual) -> hijo_izquierdo == NULL ){
+
+                        (*actual) -> hijo_izquierdo = n;
+                        (*n) -> padre = actual;
+                                              //        actual.hi
+                    }else{ //tengo que balancear --> n_/         \_actual
+
+                        aux = (*actual) -> hijo_izquierdo;
+                        (*aux) -> hijo_derecho = actual;
+                        (*aux) -> hijo_izquierdo = n;
+                        (*actual) -> padre = aux;
+                        (*actual) -> hijo_izquierdo = NULL;
+
+                     }
                 }
                 break;
             case 0:// entradas actual y entr tienen la misma prioridad
 
             case 1:// entrada entr tiene mayor prioridad que la entrada actual
-               if( (*actual) -> hijo_izquierdo == NULL && (*actual) -> hijo_derecho != NULL){
 
-               }
 
         };
     }
