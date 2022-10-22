@@ -30,7 +30,6 @@ int cp_insertar(TColaCP cola, TEntrada entr){
     int p, inserte = FALSE, cant_elem;
     TNodo n, actual, aux;
 
-    //hay que chequear si es una entrada válida
     n = malloc(sizeof(struct nodo));
     n -> entrada = entr;
 
@@ -42,9 +41,7 @@ int cp_insertar(TColaCP cola, TEntrada entr){
     }else
         actual = cola -> raiz;
 
-   //hay que chequear si esta vacia
-
-    while(!inserte){
+    while(!inserte && (entr == ELE_NULO || entr -> clave == ELE_NULO)){//chequeo que sea una entrada válida tambn
 
         if( actual -> entrada == ELE_NULO )
             break;
