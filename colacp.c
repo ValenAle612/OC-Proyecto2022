@@ -3,7 +3,7 @@
 #include "colacp.h" //cola con prioridad header
 
 /**
-    Crea y retorna una cola con prioridad vacía.
+    Crea y retorna una cola con prioridad vacï¿½a.
 */
 TColaCP crear_cola_cp(int (*f)(TEntrada, TEntrada)){
 
@@ -20,102 +20,97 @@ TColaCP crear_cola_cp(int (*f)(TEntrada, TEntrada)){
    return * cp;
 }
 
+void heap_sort(TColaCP cola, TNodo nodo){
+
+}
+
+/**
+ * Asigna al nodo nuevo el padre del nodo original y
+ * al original el nodo nuevo como padre
+*/
+void intercambiar_padres(TNodo original, TNodo nuevo) {
+    nuevo -> padre = original -> padre;
+    if((original -> padre -> hijo_izquierdo) == original) {
+        original -> padre -> hijo_izquierdo = nuevo; 
+    }
+    else
+        original -> padre -> hijo_derecho = nuevo;
+    original -> padre = nuevo;
+}
+
+/**
+ * Elimina los hijos del nodo original y en su lugar 
+ * los asigna como hijos del nodo nuevo.
+*/
+void intercambiar_hijos(TNodo original, TNodo nuevo) {
+    if(original -> hijo_izquierdo != POS_NULA) {
+        nuevo -> hijo_izquierdo = original -> hijo_izquierdo;
+        original -> hijo_izquierdo = POS_NULA;
+    }
+    if(original -> hijo_derecho != POS_NULA) {
+        nuevo -> hijo_derecho = nuevo -> hijo_derecho;  
+        original -> hijo_derecho = POS_NULA; 
+    }   
+}
+
+TNodo buscar_ubicacion(TColaCP cola, int cant_elem) {
+    TNodo nodo_actual, nodo_siguiente;
+    if(cant_elem == 1)
+        nodo_actual = cola -> raiz;
+    else {
+        nodo_actual = buscar_ubicacion(cola, cant_elem/2);
+        if(cant_elem%2 == 0)
+            nodo_siguiente = nodo_actual -> hijo_izquierdo;
+        else    
+            nodo_siguiente = nodo_actual -> hijo_derecho;
+        if(nodo_siguiente != POS_NULA)
+            nodo_actual = nodo_siguiente;
+    }
+    return nodo_actual;
+}
+
 /**
     Agrega la entrada a la cola.
-    -> Retorna verdadero si procede con éxito
+    -> Retorna verdadero si procede con ï¿½xito
     -> Falso, caso contrario.
 */
 int cp_insertar(TColaCP cola, TEntrada entr){
 
-    int p, inserte = FALSE, cant_elem;
-    TNodo n, actual, aux;
+    if (entr == ELE_NULO || entr -> clave == ELE_NULO)
+        break;
 
-    n = malloc(sizeof(struct nodo));
-    n -> entrada = entr;
+    int p, inserte = FALSE, cant_elem;
+    TNodo nuevo_nodo, nodo_actual, nodo_aux;
+    TEntrada entrada_actual;
+
+    nuevo_nodo = (TNodo) malloc(sizeof(struct nodo));
+    nuevo_nodo -> entrada = entr;
+    nuevo_nodo -> padre = POS_NULA;
+    nuevo_nodo -> hijo_izquierdo = POS_NULA;
+    nuevo_nodo -> hijo_derecho = POS_NULA;
 
     if(cola -> raiz == POS_NULA){
-        cola -> raiz = n;
+        cola -> raiz = nuevo_nodo;
         cola -> cantidad_elementos = 1;
-
         inserte = TRUE;
-    }else
-        actual = cola -> raiz;
-
-    while(!inserte && (entr == ELE_NULO || entr -> clave == ELE_NULO)){//chequeo que sea una entrada válida tambn
-
-        if( actual -> entrada == ELE_NULO )
-            break;
-
-        p = cola -> comparador( entr, actual -> entrada); // prioridad p
-                        // si tiene hijoizq y no der o si tiene der y no izq hay que balancear?
-        switch( p ){//si tiene menor prioridad va en el hizq sino en el der hay que acomodar
-
-            case -1:// entrada entr tiene menor prioridad que la entrada actual
-                if( actual -> hijo_izquierdo != POS_NULA && actual -> hijo_derecho != POS_NULA ){
-                    actual = actual -> hijo_izquierdo;
-                }else{
-                    if( actual -> hijo_izquierdo == POS_NULA ){
-
-
-                        (actual -> hijo_izquierdo) = n;
-                        n -> padre = actual;
-
-                        cant_elem = cola -> cantidad_elementos;
-                        cola -> cantidad_elementos = cant_elem + 1;
-
-                        inserte = TRUE;
-                                              //        actual.hi
-                    }else{ //tengo que balancear --> n_/         \_actual
-
-                        aux = actual -> hijo_izquierdo;
-                        aux -> hijo_derecho = actual;
-                        aux -> hijo_izquierdo = n;
-                        actual -> padre = aux;
-                        actual -> hijo_izquierdo = NULL;
-
-                        cant_elem = cola -> cantidad_elementos;
-                        cola -> cantidad_elementos = cant_elem + 1;
-
-                        inserte = TRUE;
-
-                     }
-                }
-                break;
-            case 0:// entradas actual y entr tienen la misma prioridad, actualizo el valor de la entrada
-                 (actual -> entrada -> valor) = (entr -> valor);
-                 inserte = TRUE;
-                 break;
-            case 1:// entrada entr tiene mayor prioridad que la entrada actual
-                if( actual -> hijo_izquierdo != POS_NULA && actual -> hijo_derecho != POS_NULA ){
-                    actual = actual -> hijo_derecho;
-                }else{
-                    if( actual -> hijo_izquierdo != POS_NULA ){ // && (*actual) -> hijo_derecho == NULL ){
-                        actual -> hijo_derecho = n;
-                        n -> padre = actual;
-
-                        cant_elem = cola -> cantidad_elementos;
-                        cola -> cantidad_elementos = cant_elem + 1;
-
-                        inserte = TRUE;
-                                            //               n
-                    }else{//tengo que balancear -->  actual_/    pq n tiene mayor prioridad que el nodo actual
-
-                        aux = actual -> padre;
-                        n -> padre = aux;
-                        n -> hijo_izquierdo = actual;
-                        actual -> padre = n;
-
-                        cant_elem = cola -> cantidad_elementos;
-                        cola -> cantidad_elementos = cant_elem + 1;
-
-                        inserte = TRUE;
-                    }
-                }
-                break;
-
-        };
     }
-
+    else if(cola -> raiz -> hijo_izquierdo != POS_NULA && cola -> raiz -> hijo_derecho != POS_NULA) {
+        nodo_actual = cola -> raiz;
+        nodo_actual -> hijo_izquierdo = nuevo_nodo;
+        nuevo_nodo -> padre = nodo_actual;
+        inserte = TRUE;
+    }
+    else {
+        nodo_actual = buscar_ubicacion(cola, cola -> cantidad_elementos+1);
+        if(nodo_actual -> hijo_izquierdo == POS_NULA)
+            nodo_actual -> hijo_izquierdo = nuevo_nodo;
+        else
+            nodo_actual -> hijo_derecho = nuevo_nodo;
+        nuevo_nodo -> padre = nodo_actual;
+        heap_sort(cola, nuevo_nodo);
+        inserte = TRUE;
+    }
+    cola -> cantidad_elementos++;
     return inserte;
 }
 
