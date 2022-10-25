@@ -156,7 +156,7 @@ TEntrada cp_eliminar(TColaCP cola){
     toRet = n -> entrada;
 
     return toRet ;
-}
+}// ESTA MAAAAAAL :'(
 
 /**
     Retorna la cantidad de entradas de la cola.
