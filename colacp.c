@@ -20,8 +20,17 @@ TColaCP crear_cola_cp(int (*f)(TEntrada, TEntrada)){
    return * cp;
 }
 
-void heap_sort(TColaCP cola, TNodo nodo){
+void intercambiar_entradas(TNodo nodo1, TNodo nodo2) {
+    TEntrada temp = nodo1 -> entrada;
+    nodo1 -> entrada = nodo2 -> entrada;
+    nodo2 -> entrada = temp;
+}
 
+void ordenar(TColaCP cola, TNodo nodo){
+    if(nodo != cola -> raiz && comparador(nodo -> entrada, nuevo -> padre -> entrada == 1)) {
+        intercambiar_entradas(nodo, nodo -> padre);
+        ordenar(cola, nodo -> padre);
+    }
 }
 
 /**
@@ -107,7 +116,7 @@ int cp_insertar(TColaCP cola, TEntrada entr){
         else
             nodo_actual -> hijo_derecho = nuevo_nodo;
         nuevo_nodo -> padre = nodo_actual;
-        heap_sort(cola, nuevo_nodo);
+        ordenar(cola, nuevo_nodo);
         inserte = TRUE;
     }
     cola -> cantidad_elementos++;
