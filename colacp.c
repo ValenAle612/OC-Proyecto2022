@@ -33,6 +33,16 @@ void ordenar(TColaCP cola, TNodo nodo){
     }
 }
 
+ordenar_eliminado(TColaCP cola, TNodo nodo_raiz) {
+    TNodo nodo_menor = nodo_raiz -> hijo_izquierdo;
+    if(nodo_raiz -> nodo_derecho != ELE_NULO && comparador(nodo_menor ->entrada, nodo_raiz -> hijo_derecho -> entrada) == -1)
+        nodo_menor = nodo_raiz -> hijo_derecho;
+    if(hijo_menor != ELE_NULO && comparador(nodo_raiz, comparador(nodo_menor ->entrada, nodo_raiz -> hijo_derecho -> entrada) == -1)) {
+        intercambiar(nodo_raiz, nodo_menor);
+        ordenar_eliminado(cola, nodo_menor)
+    }
+}
+
 /**
  * Asigna al nodo nuevo el padre del nodo original y
  * al original el nodo nuevo como padre
