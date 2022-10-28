@@ -1,7 +1,11 @@
 # depslib dependency file v1.0
-1666273708 source:c:\users\laval\desktop\oc-proyecto2022\planificador.c
+1666983081 source:c:\users\laval\desktop\oc-proyecto2022\planificador.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"colacp.h"
 
-1666473322 source:c:\users\laval\desktop\oc-proyecto2022\colacp.c
+1666983049 source:c:\users\laval\desktop\oc-proyecto2022\colacp.c
 	"stdio.h"
 	<stdlib.h>
 	"colacp.h"
