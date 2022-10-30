@@ -7,17 +7,20 @@
 */
 TColaCP crear_cola_cp(int (*f)(TEntrada, TEntrada)){
 
-   TColaCP * cp = malloc(sizeof(struct cola_con_prioridad));
+   TColaCP cp = malloc(sizeof(struct cola_con_prioridad));
 
+   /*
    if(*cp == NULL){
         printf("ERROR: No se pudo reservar espacio en memoria.");
    }
+   */
 
-   (*cp) -> cantidad_elementos = 0;
-   (*cp) -> raiz = malloc(sizeof(struct nodo));
-   (*cp) -> comparador = f;
+   cp -> cantidad_elementos = 0;
+   cp -> raiz = malloc(sizeof(struct nodo));
+   cp -> comparador = f;
+   cp -> raiz = ELE_NULO;
 
-   return * cp;
+   return cp;
 }
 
 /**
@@ -33,7 +36,7 @@ void intercambiar_entradas(TNodo nodo1, TNodo nodo2) {
  * Si es necesario intercambia las entradas hasta que queda la más chica arriba.
 */
 void ordenar(TColaCP cola, TNodo nodo){
-    if(nodo != cola -> raiz && comparador(nodo -> entrada, nuevo -> padre -> entrada == 1)) {
+    if(nodo != cola -> raiz && cola -> comparador(nodo -> entrada, nodo -> padre -> entrada) == 1) {
         intercambiar_entradas(nodo, nodo -> padre);
         ordenar(cola, nodo -> padre);
     }
@@ -41,15 +44,15 @@ void ordenar(TColaCP cola, TNodo nodo){
 
 /**
  * Ordena la cola cuando se elimina un elemento.
- * 
+ *
 */
 ordenar_eliminado(TColaCP cola, TNodo nodo_raiz) {
     TNodo nodo_menor = nodo_raiz -> hijo_izquierdo;
-    if(nodo_raiz -> nodo_derecho != ELE_NULO && comparador(nodo_menor ->entrada, nodo_raiz -> hijo_derecho -> entrada) == -1)
+    if(nodo_raiz -> hijo_derecho != ELE_NULO && cola -> comparador(nodo_menor ->entrada, nodo_raiz -> hijo_derecho -> entrada) == -1)
         nodo_menor = nodo_raiz -> hijo_derecho;
-    if(hijo_menor != ELE_NULO && comparador(nodo_raiz, comparador(nodo_menor ->entrada, nodo_raiz -> hijo_derecho -> entrada) == -1)) {
-        intercambiar(nodo_raiz, nodo_menor);
-        ordenar_eliminado(cola, nodo_menor)
+    if(nodo_menor != ELE_NULO && cola -> comparador(nodo_raiz, cola -> comparador(nodo_menor ->entrada, nodo_raiz -> hijo_derecho -> entrada) == -1)) {
+        intercambiar_entradas(nodo_raiz, nodo_menor);
+        ordenar_eliminado(cola, nodo_menor);
     }
 }
 
@@ -64,7 +67,7 @@ TNodo buscar_ubicacion(TColaCP cola, int cant_elem) {
         nodo_actual = buscar_ubicacion(cola, cant_elem/2);
         if(cant_elem%2 == 0)
             nodo_siguiente = nodo_actual -> hijo_izquierdo;
-        else    
+        else
             nodo_siguiente = nodo_actual -> hijo_derecho;
         if(nodo_siguiente != POS_NULA)
             nodo_actual = nodo_siguiente;
@@ -78,49 +81,49 @@ TNodo buscar_ubicacion(TColaCP cola, int cant_elem) {
     -> Falso, caso contrario.
 */
 int cp_insertar(TColaCP cola, TEntrada entr){
+    int inserte = FALSE;
 
-    if (entr == ELE_NULO || entr -> clave == ELE_NULO)
-        break;
+    if (entr != ELE_NULO && entr -> clave!= ELE_NULO) {
 
-    int p, inserte = FALSE, cant_elem;
-    TNodo nuevo_nodo, nodo_actual, nodo_aux;
-    TEntrada entrada_actual;
+        int p, cant_elem;
+        TNodo nuevo_nodo, nodo_actual, nodo_aux;
+        TEntrada entrada_actual;
 
-    nuevo_nodo = (TNodo) malloc(sizeof(struct nodo));
-    nuevo_nodo -> entrada = entr;
-    nuevo_nodo -> padre = POS_NULA;
-    nuevo_nodo -> hijo_izquierdo = POS_NULA;
-    nuevo_nodo -> hijo_derecho = POS_NULA;
+        nuevo_nodo = (TNodo) malloc(sizeof(struct nodo));
+        nuevo_nodo -> entrada = entr;
+        nuevo_nodo -> padre = POS_NULA;
+        nuevo_nodo -> hijo_izquierdo = POS_NULA;
+        nuevo_nodo -> hijo_derecho = POS_NULA;
 
-    if(cola -> raiz == POS_NULA){
-        cola -> raiz = nuevo_nodo;
-        cola -> cantidad_elementos = 1;
-        inserte = TRUE;
-    }
-    else if(cola -> raiz -> hijo_izquierdo == POS_NULA && cola -> raiz -> hijo_derecho == POS_NULA) {
-        nodo_actual = cola -> raiz;
-        nodo_actual -> hijo_izquierdo = nuevo_nodo;
-        nuevo_nodo -> padre = nodo_actual;
-        inserte = TRUE;
-    }
-    else {
-        nodo_actual = buscar_ubicacion(cola, cola -> cantidad_elementos+1);
-        if(nodo_actual -> hijo_izquierdo == POS_NULA)
+        if(cola -> raiz == POS_NULA){
+            cola -> raiz = nuevo_nodo;
+            inserte = TRUE;
+        }
+        else if(cola -> raiz -> hijo_izquierdo == POS_NULA && cola -> raiz -> hijo_derecho == POS_NULA) {
+            nodo_actual = cola -> raiz;
             nodo_actual -> hijo_izquierdo = nuevo_nodo;
-        else
-            nodo_actual -> hijo_derecho = nuevo_nodo;
-        nuevo_nodo -> padre = nodo_actual;
-        ordenar(cola, nuevo_nodo);
-        inserte = TRUE;
+            nuevo_nodo -> padre = nodo_actual;
+            inserte = TRUE;
+        }
+        else {
+            nodo_actual = buscar_ubicacion(cola, cola -> cantidad_elementos+1);
+            if(nodo_actual -> hijo_izquierdo == POS_NULA)
+                nodo_actual -> hijo_izquierdo = nuevo_nodo;
+            else
+                nodo_actual -> hijo_derecho = nuevo_nodo;
+            nuevo_nodo -> padre = nodo_actual;
+            ordenar(cola, nuevo_nodo);
+            inserte = TRUE;
+        }
+        cola -> cantidad_elementos++;
     }
-    cola -> cantidad_elementos++;
     return inserte;
 }
 
 /**
  * Crea y retorna una nueva entrada con los valores de la entrada parametrizada.
 */
-TEntrada copiar_entrada(TEntrada entrada_original) {
+TEntrada copiar_entrada(TNodo nodo_original) {
     TEntrada toRet = (TEntrada) malloc(sizeof(struct entrada));
     //como guardo esta pija jesus (clave y valor)
     toRet -> clave = nodo_original -> entrada -> clave;
