@@ -3,6 +3,8 @@
 #include <string.h>
 #include "colacp.h"
 
+#define LONGITUD_NOMBRE 50
+
 typedef struct ciudad {
     char * nombre;
     float pos_x;
@@ -16,39 +18,78 @@ int fCompararCiudades(TEntrada c1, TEntrada c2){
 
 /**
     Permite visualizar el listado de todas las ciudades a visitar,
-    ordenadas de forma ascendente en función de la distancia que
-    existe entre la ubicación de estas ciudades y la ubicacion actual
+    ordenadas de forma ascendente en funciï¿½n de la distancia que
+    existe entre la ubicaciï¿½n de estas ciudades y la ubicacion actual
     del usuario.
-*/
-void mostrarAscendente(){
 
+    |X2 âˆ’ X1| + |Y2 âˆ’ Y1|
+
+    la prioridad es la distancia de esa ciudad a la ciudad de origen, se muestran desde la que tiene menos prioridad a la que tiene mas
+*/
+void mostrarAscendente(TColaCP cola_ciudades){
+    TCiudad ciudad_actual;
+    int numero_ciudad = 1;
+
+    while(cola_ciudades -> cantidad_elementos != 0) {
+        ciudad_actual = cola_ciudades -> raiz -> entrada -> valor;
+        printf("%i. %s.", numero_ciudad, ciudad_actual -> nombre);
+        cp_eliminar(cola_ciudades);
+        numero_ciudad++;
+    }
+   //TODO hay que liberar el espacio de la cola??   
 }
 
 /**
     Permite visualizar el listado de todas las ciudades a visitar,
-    ordenadas de forma descendente en función de la distancia que
-    existe entre la ubicación de estas ciudades y la ubicacion actual
+    ordenadas de forma descendente en funciï¿½n de la distancia que
+    existe entre la ubicaciï¿½n de estas ciudades y la ubicacion actual
     del usuario.
-*/
-void mostrarDescendente(){
 
+    la prioridad es la distancia de esa ciudad a la ciudad de origen, se muestran desde la que tiene mas prioridad a la que tiene menos
+*/
+
+void mostrarDescendente(TColaCP cola_ciudades){
+  
+    TCiudad ciudad_actual;
+    char * nombre_ciudad = malloc(LONGITUD_NOMBRE * sizeof(char));
+
+    if(cola_ciudades -> cantidad_elementos > 0) {
+        ciudad_actual = cola_ciudades -> raiz -> entrada -> valor;
+        strcpy(nombre_ciudad, ciudad_actual -> nombre);
+        cp_eliminar(cola_ciudades);
+        mostrarDescendente(cola_ciudades);
+        printf("%i. %s.", cola_ciudades -> cantidad_elementos, ciudad_actual -> nombre);
+    }
+
+    free(nombre_ciudad);
 }
+
+/**
+void mostrarDescendente(TColaCP cola_ciudades) {
+    if(cola_ciudades -> cantidad_elementos != 0)
+        mostrarDescendenteAux(cola_ciudades, cola_ciudades -> cantidad_elementos);
+}
+*/
 
 /**
     Permite visualizar un listado con el orden en el que todas
     las ciudades a visitar deben ser visitadas de forma tal que
     el usuario ubicado en una ciudad de origen, conduzca siempre
     a la proxima ciudad mas cercana al origen.
-    Se indica la distancia total recorrida con esta planificación.
+    Se indica la distancia total recorrida con esta planificaciï¿½n.
+
+    la prioridad es la distancia a la ultima ciudad insertada, empezando por la original y recorriendo todas guardando la mas cercana, 
+    podria usar opcionalmente una lista para ir sacandolas de ahi pero no se si se puede, para no recorrer lo que ya inserte
+    se muestran en orden descendente
 */
-void ReducirHorasManejo(){
+void ReducirHorasManejo(FILE *archivo){
 
 }
 
 TColaCP obtenerCiudades(char * ruta_archivo){
     FILE * archivo;
     int linea;
-    char * palabra = malloc(50 * sizeof(char)), caracterActual;
+    char * palabra = malloc(LONGITUD_NOMBRE * sizeof(char)), caracterActual;
 
     TCiudad c;
     TEntrada entry;
@@ -79,7 +120,7 @@ int main(int argc, char *argv[]){
 
     int opcion;
     char * ruta_archivo;
-    FILE * archivo; //ubicación actual del usuario
+    FILE * archivo; //ubicaciï¿½n actual del usuario
 
     ruta_archivo = argv[1];
 
@@ -88,7 +129,7 @@ int main(int argc, char *argv[]){
     printf("Archivo leido\n");
     printf("\n");
 
-    printf("------- MENÚ DE OPERACIONES -------");
+    printf("------- MENï¿½ DE OPERACIONES -------");
 
     printf("1. Mostrar Ascendente \n");
     printf("2. Mostrar Descendente \n");
@@ -104,21 +145,24 @@ int main(int argc, char *argv[]){
         printf("\n");
         switch(opcion){
             case 1:
-                mostrarAscendente();
+                obtenerCiudades(ruta_archivo);
+                mostrarAscendente(cp);
                 break;
             case 2:
-                mostrarDescendente();
+                obtenerCiudades(ruta_archivo);
+                mostrarDescendente(cp);
                 break;
             case 3:
-                ReducirHorasManejo();
+                obtenerCiudades(ruta_archivo);  
+                ReducirHorasManejo(cp);
                 break;
         }
 
-        printf("¿Desea realizar otra operacion? \n");
+        printf("ï¿½Desea realizar otra operacion? \n");
         printf(" SI (1) | NO (0)" );
         scanf("%d",&opcion);
         if(opcion == TRUE){
-            printf("------- MENÚ DE OPERACIONES -------");
+            printf("------- MENï¿½ DE OPERACIONES -------");
 
             printf("1. Mostrar Ascendente \n");
             printf("2. Mostrar Descendente \n");
