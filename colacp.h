@@ -1,10 +1,10 @@
 #ifndef COLACP_H_INCLUDED
 #define COLACP_H_INCLUDED
 
-#define FALSE 0 //valor lógico falso
-#define TRUE 1 //valor lógico verdadero
-#define CCP_NO_INI 2 //Intento de acceso inválido sobre ColaCP sin inicializar
-#define POS_NULA NULL //Posición nula
+#define FALSE 0 //valor lï¿½gico falso
+#define TRUE 1 //valor lï¿½gico verdadero
+#define CCP_NO_INI 2 //Intento de acceso invï¿½lido sobre ColaCP sin inicializar
+#define POS_NULA NULL //Posiciï¿½n nula
 #define ELE_NULO NULL //Elemento nulo
 
 typedef void * TClave;
@@ -30,17 +30,17 @@ typedef struct cola_con_prioridad {
 
 
 // ---------------------------------------------------------------------------------------------
-// Definición de prototipos y documentación de las funciones.
+// Definiciï¿½n de prototipos y documentaciï¿½n de las funciones.
 // ---------------------------------------------------------------------------------------------
 
 /**
-  * Crea y retorna una cola con prioridad vacía.
+  * Crea y retorna una cola con prioridad vacï¿½a.
   */
 extern TColaCP crear_cola_cp(int (*f)(TEntrada, TEntrada));
 
 /**
   * Agrega la entrada a la cola.
-  * -> Retorna verdadero si procede con éxito
+  * -> Retorna verdadero si procede con ï¿½xito
   * -> Falso, caso contrario.
 */
 extern int cp_insertar(TColaCP cola, TEntrada entr);

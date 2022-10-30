@@ -13,6 +13,8 @@ typedef struct ciudad {
 
 int fCompararCiudades(TEntrada c1, TEntrada c2){
 
+    int X1, X2, Y1, Y2;
+    
     return 0;
 }
 
@@ -145,15 +147,15 @@ int main(int argc, char *argv[]){
         printf("\n");
         switch(opcion){
             case 1:
-                obtenerCiudades(ruta_archivo);
+                cp = obtenerCiudades(ruta_archivo);
                 mostrarAscendente(cp);
                 break;
             case 2:
-                obtenerCiudades(ruta_archivo);
+                cp = obtenerCiudades(ruta_archivo);
                 mostrarDescendente(cp);
                 break;
             case 3:
-                obtenerCiudades(ruta_archivo);  
+                cp = obtenerCiudades(ruta_archivo);  
                 ReducirHorasManejo(cp);
                 break;
         }
@@ -175,7 +177,6 @@ int main(int argc, char *argv[]){
         }
 
     }
-
 
     return 0;
 

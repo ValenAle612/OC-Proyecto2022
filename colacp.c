@@ -20,12 +20,18 @@ TColaCP crear_cola_cp(int (*f)(TEntrada, TEntrada)){
    return * cp;
 }
 
+/**
+ * Intercambia las entradas de dos nodos parametrizados.
+*/
 void intercambiar_entradas(TNodo nodo1, TNodo nodo2) {
     TEntrada temp = nodo1 -> entrada;
     nodo1 -> entrada = nodo2 -> entrada;
     nodo2 -> entrada = temp;
 }
 
+/**
+ * Si es necesario intercambia las entradas hasta que queda la más chica arriba.
+*/
 void ordenar(TColaCP cola, TNodo nodo){
     if(nodo != cola -> raiz && comparador(nodo -> entrada, nuevo -> padre -> entrada == 1)) {
         intercambiar_entradas(nodo, nodo -> padre);
@@ -91,7 +97,7 @@ int cp_insertar(TColaCP cola, TEntrada entr){
         cola -> cantidad_elementos = 1;
         inserte = TRUE;
     }
-    else if(cola -> raiz -> hijo_izquierdo != POS_NULA && cola -> raiz -> hijo_derecho != POS_NULA) {
+    else if(cola -> raiz -> hijo_izquierdo == POS_NULA && cola -> raiz -> hijo_derecho == POS_NULA) {
         nodo_actual = cola -> raiz;
         nodo_actual -> hijo_izquierdo = nuevo_nodo;
         nuevo_nodo -> padre = nodo_actual;
