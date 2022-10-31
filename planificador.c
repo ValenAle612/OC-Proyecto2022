@@ -14,7 +14,7 @@ typedef struct ciudad {
 int fCompararCiudades(TEntrada c1, TEntrada c2){
 
     int X1, X2, Y1, Y2;
-    
+
     return 0;
 }
 
@@ -38,7 +38,7 @@ void mostrarAscendente(TColaCP cola_ciudades){
         cp_eliminar(cola_ciudades);
         numero_ciudad++;
     }
-   //TODO hay que liberar el espacio de la cola??   
+   //TODO hay que liberar el espacio de la cola??
 }
 
 /**
@@ -51,7 +51,7 @@ void mostrarAscendente(TColaCP cola_ciudades){
 */
 
 void mostrarDescendente(TColaCP cola_ciudades){
-  
+
     TCiudad ciudad_actual;
     char * nombre_ciudad = malloc(LONGITUD_NOMBRE * sizeof(char));
 
@@ -80,7 +80,7 @@ void mostrarDescendente(TColaCP cola_ciudades) {
     a la proxima ciudad mas cercana al origen.
     Se indica la distancia total recorrida con esta planificaci�n.
 
-    la prioridad es la distancia a la ultima ciudad insertada, empezando por la original y recorriendo todas guardando la mas cercana, 
+    la prioridad es la distancia a la ultima ciudad insertada, empezando por la original y recorriendo todas guardando la mas cercana,
     podria usar opcionalmente una lista para ir sacandolas de ahi pero no se si se puede, para no recorrer lo que ya inserte
     se muestran en orden descendente
 */
@@ -118,7 +118,7 @@ TColaCP obtenerCiudades(char * ruta_archivo){
 
 }
 
-int main(int argc, char *argv[]){
+int planificador(int argc, char *argv[]){
 
     int opcion;
     char * ruta_archivo;
@@ -155,7 +155,7 @@ int main(int argc, char *argv[]){
                 mostrarDescendente(cp);
                 break;
             case 3:
-                cp = obtenerCiudades(ruta_archivo);  
+                cp = obtenerCiudades(ruta_archivo);
                 ReducirHorasManejo(cp);
                 break;
         }

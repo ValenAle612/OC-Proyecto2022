@@ -47,12 +47,15 @@ void ordenar(TColaCP cola, TNodo nodo){
  *
 */
 ordenar_eliminado(TColaCP cola, TNodo nodo_raiz) {
-    TNodo nodo_menor = nodo_raiz -> hijo_izquierdo;
-    if(nodo_raiz -> hijo_derecho != ELE_NULO && cola -> comparador(nodo_menor ->entrada, nodo_raiz -> hijo_derecho -> entrada) == -1)
-        nodo_menor = nodo_raiz -> hijo_derecho;
-    if(nodo_menor != ELE_NULO && cola -> comparador(nodo_raiz, cola -> comparador(nodo_menor ->entrada, nodo_raiz -> hijo_derecho -> entrada) == -1)) {
-        intercambiar_entradas(nodo_raiz, nodo_menor);
-        ordenar_eliminado(cola, nodo_menor);
+    TNodo menor_actual;
+    if(nodo_raiz -> hijo_izquierdo != ELE_NULO){
+        menor_actual = nodo_raiz -> hijo_izquierdo;
+        if(nodo_raiz -> hijo_derecho != ELE_NULO && cola -> comparador(menor_actual -> entrada, nodo_raiz -> hijo_derecho -> entrada) == -1)
+            menor_actual = nodo_raiz -> hijo_derecho;
+        if(cola -> comparador(nodo_raiz, cola -> comparador(menor_actual ->entrada, nodo_raiz -> hijo_derecho -> entrada) == -1)) {
+            intercambiar_entradas(nodo_raiz, menor_actual);
+            ordenar_eliminado(cola, menor_actual);
+        }
     }
 }
 
@@ -146,10 +149,15 @@ TEntrada cp_eliminar(TColaCP cola){
         exit(CCP_NO_INI);
     }
 
+    printf("Hasta aca llego bien.\n");
     if(cola -> cantidad_elementos != 0) {
+        printf("Antes de copiar entrada.\n");
         toRet = copiar_entrada(nodo_actual);
+        printf("Clave eliminada: %i. Valor eliminado: %i.\n", toRet->clave, toRet->valor);
         ordenar_eliminado(cola, nodo_actual);
+        printf("Ordenar eliminado funciona.\n");
         free(nodo_actual);
+        printf("Clave eliminada: %i. Valor eliminado: %i.\n", toRet->clave, toRet->valor);
         cola -> cantidad_elementos--;
     }
     return toRet ;

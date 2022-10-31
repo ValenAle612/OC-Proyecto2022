@@ -17,24 +17,63 @@ int fComparador(TEntrada c1, TEntrada c2){
         return 0;
 }
 
+void mostrarElementosCola(TColaCP cola) {
+    TEntrada entrada_eliminada;
+    printf("Aun no entre a while.\n");
+    while(cola -> cantidad_elementos != 0) {
+        printf("Estoy por eliminar.\n");
+        entrada_eliminada = cp_eliminar(cola);
+        printf("Clave eliminada: %i. Valor eliminado: %i.\n", entrada_eliminada->clave, entrada_eliminada->valor);
+        printf("Elementos restantes en la cola: %i.\n", cola->cantidad_elementos);
+    }
+}
+
+
 int main()
 {
     printf("Hello world!\n");
-    TColaCP cola_pepe = crear_cola_cp(&fComparador);
+    int resultado;
+    TColaCP cola_test = crear_cola_cp(&fComparador);
+    TEntrada entrada_eliminada;
+
     TEntrada entrada1 = (TEntrada) malloc(sizeof(struct entrada));
-    entrada1 -> clave = 1;
+    entrada1 -> clave = 34;
     entrada1 -> valor = 879;
     TEntrada entrada2 = (TEntrada) malloc(sizeof(struct entrada));
-    entrada2 -> clave = 2;
+    entrada2 -> clave = 223;
     entrada2 -> valor = 547;
-    printf("cree la cola?\n");
-    printf("cantidad de elementos en la cola: %i\n", cola_pepe->cantidad_elementos);
-    int resultado = cp_insertar(cola_pepe, entrada1);
-    printf("agregue raiz? %i\n", resultado);
-    printf("cantidad de elementos en la cola: %i\n", cola_pepe->cantidad_elementos);
-    resultado = cp_insertar(cola_pepe, entrada2);
-    printf("agregue elemento? %i\n", resultado);
-    printf("cantidad de elementos en la cola: %i\n", cola_pepe->cantidad_elementos);
+    TEntrada entrada3 = (TEntrada) malloc(sizeof(struct entrada));
+    entrada3 -> clave = 33;
+    entrada3 -> valor = 545;
+    TEntrada entrada4 = (TEntrada) malloc(sizeof(struct entrada));
+    entrada4 -> clave = 57;
+    entrada4 -> valor = 983;
+    TEntrada entrada5 = (TEntrada) malloc(sizeof(struct entrada));
+    entrada5 -> clave = 7;
+    entrada5 -> valor = 556;
+
+    printf("Cree la cola?\n");
+    printf("Cantidad de elementos en la cola: %i.\n", cola_test->cantidad_elementos);
+    resultado = cp_insertar(cola_test, entrada1);
+    printf("Agregue raiz? %i.\n", resultado);
+    printf("Raiz actual: Clave %i, Valor %i.\n", cola_test->raiz->entrada->clave, cola_test->raiz->entrada->valor);
+    printf("Cantidad de elementos en la cola: %i.\n", cola_test->cantidad_elementos);
+    resultado = cp_insertar(cola_test, entrada2);
+    printf("Agregue elemento? %i.\n", resultado);
+    printf("Cantidad de elementos en la cola: %i.\n", cola_test->cantidad_elementos);
+    printf("Raiz actual: Clave %i, Valor %i.\n", cola_test->raiz->entrada->clave, cola_test->raiz->entrada->valor);
+    resultado = cp_insertar(cola_test, entrada3);
+    printf("Agregue elemento? %i.\n", resultado);
+    printf("Cantidad de elementos en la cola: %i.\n", cola_test->cantidad_elementos);
+    printf("Raiz actual: Clave %i, Valor %i.\n", cola_test->raiz->entrada->clave, cola_test->raiz->entrada->valor);
+    resultado = cp_insertar(cola_test, entrada4);
+    printf("Agregue elemento? %i.\n", resultado);
+    printf("Cantidad de elementos en la cola: %i.\n", cola_test->cantidad_elementos);
+    printf("Raiz actual: Clave %i, Valor %i.\n", cola_test->raiz->entrada->clave, cola_test->raiz->entrada->valor);
+    resultado = cp_insertar(cola_test, entrada5);
+    printf("Agregue elemento? %i.\n", resultado);
+    printf("Cantidad de elementos en la cola: %i.\n", cola_test->cantidad_elementos);
+    printf("Raiz actual: Clave %i, Valor %i.\n", cola_test->raiz->entrada->clave, cola_test->raiz->entrada->valor);
 
 
     return 0;
