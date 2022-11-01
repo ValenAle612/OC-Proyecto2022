@@ -65,10 +65,10 @@ int mostrarElementosCola(TColaCP cola) {
         entrada_eliminada = cp_eliminar(cola);
         printf("Clave eliminada: %i. Valor eliminado: %i.\n", entrada_eliminada->clave, entrada_eliminada->valor);
         printf("Elementos restantes en la cola: %i.\n", cola->cantidad_elementos);
-        printf("\n\tmuestro la cola antes de ordenarla\n");
-        mostrarArbol(cola, cola->raiz);
-        cola = ordenarColaEze(cola);
-        printf("\n\tmuestro la cola despues de ordenarla\n");
+        //printf("\n\tmuestro la cola antes de ordenarla\n");
+        //mostrarArbol(cola, cola->raiz);
+        //cola = ordenarColaEze(cola);
+        //printf("\n\tmuestro la cola despues de ordenarla\n");
         mostrarArbol(cola, cola->raiz);
     }
     return 1;
@@ -76,6 +76,7 @@ int mostrarElementosCola(TColaCP cola) {
 
 int main()
 {
+    TNodo nodo_ultimo;
     printf("Hello world!\n");
     int resultado;
     TColaCP cola_test = crear_cola_cp(&fComparador);
@@ -130,6 +131,9 @@ int main()
     mostrarArbol(cola_test, cola_test->raiz);
     printf("Termine de mostrar elementos de la cola(del mostrar arbol).\n");
     printf("\n");
+    nodo_ultimo = buscar_ubicacion(cola_test, cola_test->cantidad_elementos);
+    printf("Ultimo elemento encontrado: Clave %i, Valor %i.\n", nodo_ultimo->entrada->clave, nodo_ultimo->entrada->valor);
+
     int res = mostrarElementosCola(cola_test);
     printf("Termine de mostrar elementos de la cola?.\n");
 
