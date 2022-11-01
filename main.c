@@ -61,10 +61,14 @@ int mostrarElementosCola(TColaCP cola) {
     TEntrada entrada_eliminada;
     //printf("Aun no entre a while.\n");
     while(cola -> cantidad_elementos != 0) {
+        printf("\n\tvoy a eleminar la raiz:\n");
         entrada_eliminada = cp_eliminar(cola);
         printf("Clave eliminada: %i. Valor eliminado: %i.\n", entrada_eliminada->clave, entrada_eliminada->valor);
         printf("Elementos restantes en la cola: %i.\n", cola->cantidad_elementos);
+        printf("\n\tmuestro la cola antes de ordenarla\n");
+        mostrarArbol(cola, cola->raiz);
         cola = ordenarColaEze(cola);
+        printf("\n\tmuestro la cola despues de ordenarla\n");
         mostrarArbol(cola, cola->raiz);
     }
     return 1;
@@ -98,10 +102,10 @@ int main()
 
     printf("Cree la cola?\n");
     printf("Cantidad de elementos en la cola: %i.\n", cola_test->cantidad_elementos);
-    /**resultado = cp_insertar(cola_test, entrada1);
+    resultado = cp_insertar(cola_test, entrada1);
     printf("Agregue raiz? %i.\n", resultado);
     printf("Raiz actual: Clave %i, Valor %i.\n", cola_test->raiz->entrada->clave, cola_test->raiz->entrada->valor);
-    printf("Cantidad de elementos en la cola: %i.\n", cola_test->cantidad_elementos);*/
+    printf("Cantidad de elementos en la cola: %i.\n", cola_test->cantidad_elementos);
     resultado = cp_insertar(cola_test, entrada6);
     printf("Agregue elemento? %i.\n", resultado);
     printf("Cantidad de elementos en la cola: %i.\n", cola_test->cantidad_elementos);
@@ -110,10 +114,10 @@ int main()
     printf("Agregue elemento? %i.\n", resultado);
     printf("Cantidad de elementos en la cola: %i.\n", cola_test->cantidad_elementos);
     printf("Raiz actual: Clave %i, Valor %i.\n", cola_test->raiz->entrada->clave, cola_test->raiz->entrada->valor);
-    /**resultado = cp_insertar(cola_test, entrada4);
+    resultado = cp_insertar(cola_test, entrada4);
     printf("Agregue elemento? %i.\n", resultado);
     printf("Cantidad de elementos en la cola: %i.\n", cola_test->cantidad_elementos);
-    printf("Raiz actual: Clave %i, Valor %i.\n", cola_test->raiz->entrada->clave, cola_test->raiz->entrada->valor);*/
+    printf("Raiz actual: Clave %i, Valor %i.\n", cola_test->raiz->entrada->clave, cola_test->raiz->entrada->valor);
     resultado = cp_insertar(cola_test, entrada5);
     printf("Agregue elemento? %i.\n", resultado);
     printf("Cantidad de elementos en la cola: %i.\n", cola_test->cantidad_elementos);

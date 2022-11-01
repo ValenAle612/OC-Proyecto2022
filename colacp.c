@@ -125,8 +125,15 @@ int cp_insertar(TColaCP cola, TEntrada entr){
         }
         else if(cola -> raiz -> hijo_izquierdo == POS_NULA && cola -> raiz -> hijo_derecho == POS_NULA) {
             nodo_actual = cola -> raiz;
-            nodo_actual -> hijo_izquierdo = nuevo_nodo;
-            nuevo_nodo -> padre = nodo_actual;
+            if(cola->comparador(nodo_actual -> entrada, nuevo_nodo -> entrada) == 1) {
+                nodo_actual -> hijo_izquierdo = nuevo_nodo;
+                nuevo_nodo -> padre = nodo_actual;
+            }
+            else {
+                nodo_actual -> padre = nuevo_nodo;
+                nuevo_nodo -> hijo_izquierdo = nodo_actual;
+                cola -> raiz = nuevo_nodo;
+            }
             inserte = TRUE;
         }
         else {
@@ -238,12 +245,17 @@ TEntrada cp_eliminar(TColaCP cola){
         nodo_eliminar = ordenar_luego_de_eliminar(cola, nodo_actual);
         //printf("ordene luego de eliminar\n");
         cola -> cantidad_elementos--;
-        //printf("pasamos toda esta cadorcha\n");
     }
     if(nodo_eliminar != ELE_NULO && nodo_eliminar != cola->raiz) {
         padre_nodo_eliminar = nodo_eliminar->padre;
         if (padre_nodo_eliminar->hijo_izquierdo == nodo_eliminar) {
-            padre_nodo_eliminar->hijo_izquierdo = ELE_NULO;
+            if (padre_nodo_eliminar->hijo_derecho != ELE_NULO) {
+                padre_nodo_eliminar->hijo_izquierdo = padre_nodo_eliminar->hijo_derecho;
+                padre_nodo_eliminar->hijo_derecho = ELE_NULO;
+            }
+            else {
+                padre_nodo_eliminar->hijo_izquierdo = ELE_NULO;
+            }
         }
         else {
             padre_nodo_eliminar->hijo_derecho = ELE_NULO;
