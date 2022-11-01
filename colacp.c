@@ -25,11 +25,17 @@ TColaCP crear_cola_cp(int (*f)(TEntrada, TEntrada)){
 
 /**
  * Intercambia las entradas de dos nodos parametrizados.
+ * EL ERROR ESTA ACA
 */
 void intercambiar_entradas(TNodo nodo1, TNodo nodo2) {
-    TEntrada temp = nodo1 -> entrada;
-    nodo1 -> entrada = nodo2 -> entrada;
-    nodo2 -> entrada = temp;
+    TEntrada temp = (TEntrada) malloc(sizeof(struct entrada));
+    temp->clave = nodo1 -> entrada->clave;
+    temp->valor = nodo1->entrada->valor;
+    nodo1 -> entrada ->clave= nodo2 -> entrada->clave;
+    nodo1->entrada->valor = nodo2->entrada->valor;
+    nodo2 -> entrada->clave = temp->clave;
+    nodo2->entrada->valor = temp->valor;
+    free(temp);
 }
 
 /**
@@ -42,21 +48,36 @@ void ordenar(TColaCP cola, TNodo nodo){
     }
 }
 
+
+/**
+    mientras no este ordenado
+    miro los hijos y me quedo con el mas chico
+    si es el izquierdo
+        el nuevo hijo derecho del izquierdo es el derecho
+        el nuevo hijo izquierdo del ex izquierdo va a ser el mas chico de los hijos
+
+*/
+
 /**
  * Ordena la cola cuando se elimina un elemento.
  *
+ *
+ *
 */
-ordenar_eliminado(TColaCP cola, TNodo nodo_raiz) {
-    TNodo menor_actual;
+TNodo ordenar_eliminado(TColaCP cola, TNodo nodo_raiz) {
+    TNodo menor_actual = ELE_NULO;
     if(nodo_raiz -> hijo_izquierdo != ELE_NULO){
-        menor_actual = nodo_raiz -> hijo_izquierdo;
-        if(nodo_raiz -> hijo_derecho != ELE_NULO && cola -> comparador(menor_actual -> entrada, nodo_raiz -> hijo_derecho -> entrada) == -1)
+        menor_actual = nodo_raiz -> hijo_izquierdo; //asumo que el menor es el izquierdo
+        //printf("Hijo izquierdo actual: Clave %i, Valor %i.\n", menor_actual->entrada->clave, menor_actual->entrada->valor);
+        //si el derecho es mas chiquito los intercambio de lugar
+        if(nodo_raiz -> hijo_derecho != ELE_NULO && cola -> comparador(menor_actual -> entrada, nodo_raiz -> hijo_derecho -> entrada) == 1){
             menor_actual = nodo_raiz -> hijo_derecho;
-        if(cola -> comparador(nodo_raiz, cola -> comparador(menor_actual ->entrada, nodo_raiz -> hijo_derecho -> entrada) == -1)) {
-            intercambiar_entradas(nodo_raiz, menor_actual);
-            ordenar_eliminado(cola, menor_actual);
+            //printf("Hijo izquierdo actual: Clave %i, Valor %i.\n", menor_actual->entrada->clave, menor_actual->entrada->valor);
         }
+        intercambiar_entradas(nodo_raiz, menor_actual);
+        ordenar_eliminado(cola, menor_actual);
     }
+    return menor_actual;
 }
 
 /**
@@ -129,19 +150,80 @@ int cp_insertar(TColaCP cola, TEntrada entr){
 TEntrada copiar_entrada(TNodo nodo_original) {
     TEntrada toRet = (TEntrada) malloc(sizeof(struct entrada));
     //como guardo esta pija jesus (clave y valor)
-    toRet -> clave = nodo_original -> entrada -> clave;
-    toRet -> valor = nodo_original -> entrada -> valor;
+    toRet -> clave = (nodo_original -> entrada -> clave);
+    toRet -> valor = (nodo_original -> entrada -> valor);
+    return toRet;
 }
 
 
 /**
     Elimina y retorna la entrada con mayor prioridad
     de la cola.
+    #define PRIMERO_MENOR_PRIORIDAD -1
+    #define PRIMERO_MAYOR_PRIORIDAD 1
+    #define IGUAL_PRIORIDAD 0
 */
+TNodo ordenar_luego_de_eliminar(TColaCP cola, TNodo raiz_actual) {
+    TNodo nodo_eliminar;
+    TEntrada entrada_actual = raiz_actual -> entrada;
+    if (raiz_actual->hijo_izquierdo == ELE_NULO && raiz_actual->hijo_derecho == ELE_NULO) {
+        nodo_eliminar = raiz_actual;
+    }
+
+    if(raiz_actual -> hijo_izquierdo != ELE_NULO) {
+        if(raiz_actual->hijo_derecho == ELE_NULO) {
+            intercambiar_entradas(raiz_actual, raiz_actual -> hijo_izquierdo);
+            nodo_eliminar = ordenar_luego_de_eliminar(cola, raiz_actual -> hijo_izquierdo);
+        }
+        else {
+            //tenemos 2 hijos
+            if(cola->comparador(raiz_actual -> hijo_izquierdo -> entrada, raiz_actual -> hijo_derecho -> entrada) == 1) {
+                    //hijo iz menor que hijo derecho
+                intercambiar_entradas(raiz_actual, raiz_actual -> hijo_izquierdo);
+                nodo_eliminar = ordenar_luego_de_eliminar(cola, raiz_actual -> hijo_izquierdo);
+            }
+            else {
+                //hijo izq mayor que hijo der
+                //printf("entre aca wacho, %i tiene mayor prioridad que %i\n", raiz_actual->hijo_izquierdo->entrada->clave, raiz_actual->hijo_derecho->entrada->clave);
+                //printf("este es el hijo derecho de la raiz: %i", raiz_actual->hijo_derecho->entrada->clave);
+                intercambiar_entradas(raiz_actual, raiz_actual -> hijo_derecho);
+                nodo_eliminar = ordenar_luego_de_eliminar(cola, raiz_actual -> hijo_derecho);
+            }
+        }
+    }
+
+    return nodo_eliminar;
+}
+
+
+/*
+ordenarLuegoDeEliminar(TColaCP cola, TNodo raiz_actual)
+    Verifico si la cola esta vacia -> error
+    TEntrada guardo la entrada de la raiz que voy a eliminar
+    miro si la raiz actual tiene hijos
+        si tiene solo hijo izquierdo
+            raiz de la cola ahora es hijo izquierdo
+        si tiene ambos hijos
+            si hijo izquierdo tiene mas prioridad que hijo derecho
+                raiz de la cola ahora es hijo izquierdo
+                llamo a ordenarLuegoDeEliminar con la cola e hijo izquierdo
+            sino
+                raiz de la cola ahora es hijo derecho
+                llamo a ordenarLuegoDeEliminar con la cola e hijo derecho
+
+
+
+    en la funcion que llama:
+        raiz de la cola tiene padre nulo
+        hago un free en la ex raiz
+*/
+
 TEntrada cp_eliminar(TColaCP cola){
 
     TNodo nodo_actual = cola -> raiz;
+    TNodo nodo_eliminar = ELE_NULO;
     TEntrada toRet = ELE_NULO;
+    TNodo padre_nodo_eliminar;
 
     //TODO revisar pos nulas y ele nulos y creacion de cola(valor inicial de raiz)
     if(nodo_actual == POS_NULA){
@@ -149,17 +231,25 @@ TEntrada cp_eliminar(TColaCP cola){
         exit(CCP_NO_INI);
     }
 
-    printf("Hasta aca llego bien.\n");
     if(cola -> cantidad_elementos != 0) {
-        printf("Antes de copiar entrada.\n");
+        nodo_eliminar = nodo_actual;
         toRet = copiar_entrada(nodo_actual);
-        printf("Clave eliminada: %i. Valor eliminado: %i.\n", toRet->clave, toRet->valor);
-        ordenar_eliminado(cola, nodo_actual);
-        printf("Ordenar eliminado funciona.\n");
-        free(nodo_actual);
-        printf("Clave eliminada: %i. Valor eliminado: %i.\n", toRet->clave, toRet->valor);
+        //printf("Entrada a eliminar: Clave %i, Valor %i.\n", toRet->clave, toRet->valor);
+        nodo_eliminar = ordenar_luego_de_eliminar(cola, nodo_actual);
+        //printf("ordene luego de eliminar\n");
         cola -> cantidad_elementos--;
+        //printf("pasamos toda esta cadorcha\n");
     }
+    if(nodo_eliminar != ELE_NULO && nodo_eliminar != cola->raiz) {
+        padre_nodo_eliminar = nodo_eliminar->padre;
+        if (padre_nodo_eliminar->hijo_izquierdo == nodo_eliminar) {
+            padre_nodo_eliminar->hijo_izquierdo = ELE_NULO;
+        }
+        else {
+            padre_nodo_eliminar->hijo_derecho = ELE_NULO;
+        }
+    }
+    free(nodo_eliminar);
     return toRet ;
 }
 
