@@ -140,10 +140,9 @@ TEntrada cp_eliminar(TColaCP cola){
     TNodo nodo_actual;
     TNodo nodo_eliminar = ELE_NULO;
     TEntrada toRet = ELE_NULO;
-    int esta_ordenado = FALSE;
 
     if(cola -> raiz == POS_NULA){
-        printf("ERROR: LA COLA ESTA VACIA\n");
+        printf("ERROR: LA COLA ESTA VACIA.\n");
         exit(CCP_NO_INI);
     }
     if(cola -> cantidad_elementos != 0) {
@@ -176,8 +175,9 @@ TEntrada cp_eliminar(TColaCP cola){
     Retorna la cantidad de entradas de la cola.
 */
 int cp_cantidad(TColaCP cola){
-
-    return cola -> cantidad_elementos;
+    int cantidad_elementos;
+    cantidad_elementos = cola->cantidad_elementos;
+    return cantidad_elementos;
 }
 
 static void eliminarInterno(void (*fEliminar)(TEntrada), TNodo actual){
