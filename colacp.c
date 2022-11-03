@@ -11,12 +11,12 @@ TColaCP crear_cola_cp(int (*f)(TEntrada, TEntrada)){
 
    if(cp == NULL){
         printf("ERROR: No se pudo reservar espacio en memoria.");
+   }else{
+        cp -> cantidad_elementos = 0;
+        cp -> raiz = malloc(sizeof(struct nodo));
+        cp -> comparador = f;
+        cp -> raiz = ELE_NULO;
    }
-
-   cp -> cantidad_elementos = 0;
-   cp -> raiz = malloc(sizeof(struct nodo));
-   cp -> comparador = f;
-   cp -> raiz = ELE_NULO;
 
    return cp;
 }
@@ -153,7 +153,7 @@ TEntrada cp_eliminar(TColaCP cola){
     TNodo nodo_eliminar;
     TEntrada toRet;
 
-    if(cola -> raiz == POS_NULA){ //No tendria que retornar ELE_NULO???
+    if(cola -> raiz == POS_NULA){
         printf("ERROR: LA COLA ESTA VACIA.\n");
         exit(CCP_NO_INI);
     }
@@ -173,17 +173,18 @@ TEntrada cp_eliminar(TColaCP cola){
         intercambiar_entradas(cola -> raiz, nodo_eliminar);
         nodo_actual = nodo_eliminar -> padre;
 
-        if(nodo_actual -> hijo_derecho == ELE_NULO){
-            nodo_actual -> hijo_izquierdo = ELE_NULO;
+        if(nodo_actual -> hijo_derecho == POS_NULA){
+            nodo_actual -> hijo_izquierdo = POS_NULA;
         }
         else {
-            nodo_actual -> hijo_derecho = ELE_NULO;
+            nodo_actual -> hijo_derecho = POS_NULA;
         }
 
         free(nodo_eliminar);
         cola -> cantidad_elementos--;
         ordenar_luego_de_eliminar(cola, cola -> raiz);
     }
+
     return toRet;
 
 }
@@ -211,7 +212,7 @@ static void eliminarInterno(void (*fEliminar)(TEntrada), TNodo actual){
     free(actual);
 }
 
-/*
+/**
     Elimina todas las entradas y libera toda la memoria utilizada por la queue.
 */
 void cp_destruir(TColaCP cola, void (*fEliminar)(TEntrada) ){
