@@ -86,13 +86,17 @@ void mostrarDescendente(TColaCP cp){
     char * nombre_ciudad;
 
     if(cp_cantidad(cp) > 0) {
+
         nombre_ciudad = malloc(LONGITUD_NOMBRE * sizeof(char));
+
         cantidad_elementos = cp_cantidad(cp);
         entrada_actual = cp_eliminar(cp);
         ciudad_actual = entrada_actual -> valor;
         strcpy(nombre_ciudad, ciudad_actual -> nombre);
         mostrarDescendente(cp);
+
         printf("\t%i. %s.\n", cantidad_elementos, ciudad_actual -> nombre);
+
         fEliminarCiudades(entrada_actual);
     }
     else {
@@ -109,7 +113,8 @@ void mostrarDescendente(TColaCP cp){
 */
 void ReducirHorasManejo(TColaCP cp){
 
-    int distanciaTotal, index;
+    float distanciaTotal;
+    int index;
     TEntrada e_aux;
     TCiudad c, anterior;
 
@@ -144,6 +149,7 @@ TColaCP obtenerCiudades(FILE * archivo){
     char ciudad[255];
 
     fseek(archivo, 0, SEEK_SET);
+
     cp = crear_cola_cp( &fCompararCiudades );
     fscanf(archivo,"%d;%d\n",&x,&y);//ubicación actual del usuario
     ubicacionActual -> pos_x = x;
@@ -215,6 +221,7 @@ int planificador(FILE *archivo){
 
     free(ubicacionActual);
     fclose(archivo);
+
     return 0;
 
 }
