@@ -218,7 +218,7 @@ int planificador(FILE *archivo){
                 printf("\nGRACIAS, VUELVA PRONTOS\n");
                 break;
             default:
-                printf("OPCION INVALIDA; INTENTE NUEVAMENTE \n");
+                printf("OPCION INVALIDA; INTENTE NUEVAMENTE\n");
             break;
         }
         cp_destruir(cola,&fEliminarCiudades);
