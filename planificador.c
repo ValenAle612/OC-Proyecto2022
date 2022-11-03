@@ -214,12 +214,17 @@ int planificador(FILE *archivo){
             case 3:
                 ReducirHorasManejo(cola);
                 break;
+            case 4:
+                printf("\nGRACIAS, VUELVA PRONTOS\n");
+                break;
+            default:
+                printf("OPCION INVALIDA; INTENTE NUEVAMENTE \n");
+            break;
         }
         cp_destruir(cola,&fEliminarCiudades);
 
-    } while(opcion == 1 || opcion == 2 || opcion == 3);
+    } while(opcion != 4);
 
-    printf("\nGRACIAS, VUELVA PRONTOS\n");
 
     free(ubicacionActual);
     fclose(archivo);
