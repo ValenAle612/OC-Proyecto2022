@@ -74,7 +74,7 @@ int mostrarElementosCola(TColaCP cola) {
     return 1;
 }
 
-int main()
+int mainnnn()
 {
     TNodo nodo_ultimo;
     printf("Hello world!\n");

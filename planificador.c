@@ -22,8 +22,8 @@ int fCompararCiudades(TEntrada e1, TEntrada e2){
     int prioridad = 0;
     int c1, c2;
 
-    c1 = ( e1 -> clave );
-    c2 = ( e2 -> clave );
+    c1 = *(int*)( e1 -> clave );
+    c2 = *(int*)( e2 -> clave );
 
     if(c1 > c2){
         prioridad = -1;
@@ -38,6 +38,7 @@ void fEliminarCiudades (TEntrada e) {
 
     TCiudad ciudad_actual;
     ciudad_actual = e -> valor;
+    free(e -> clave);
     free(ciudad_actual -> nombre);
     free(ciudad_actual);
 
@@ -49,7 +50,7 @@ void fEliminarCiudades (TEntrada e) {
     existe entre la ubicación de estas ciudades y la ubicacion actual
     del usuario.
 */
-void mostrarAscendente(cp){
+void mostrarAscendente(TColaCP cp){
 
     TEntrada e_aux;
     TCiudad c;
@@ -77,7 +78,7 @@ void mostrarAscendente(cp){
     existe entre la ubicación de estas ciudades y la ubicacion actual
     del usuario.
 */
-void mostrarDescendente(cp){
+void mostrarDescendente(TColaCP cp){
 
     int cantidad_elementos;
     TEntrada entrada_actual;
@@ -106,7 +107,7 @@ void mostrarDescendente(cp){
     a la proxima ciudad mas cercana al origen.
     Se indica la distancia total recorrida con esta planificación.
 */
-void ReducirHorasManejo(cp){
+void ReducirHorasManejo(TColaCP cp){
 
     int distanciaTotal, index;
     TEntrada e_aux;
@@ -162,7 +163,8 @@ TColaCP obtenerCiudades(FILE * archivo){
         c -> pos_y = y;
 
         entry = (TEntrada) malloc(sizeof(struct entrada));
-        entry -> clave = (int)((x - ubicacionActual->pos_x) + (y - ubicacionActual->pos_y));
+        entry -> clave = malloc(sizeof(int));
+        *(int*)entry -> clave = ((x - ubicacionActual->pos_x) + (y - ubicacionActual->pos_y));
         entry -> valor = c;
 
         cp_insertar(cp,entry);
