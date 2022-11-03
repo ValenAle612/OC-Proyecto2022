@@ -20,10 +20,10 @@ TCiudad ubicacionActual;//ubicacion actual del usuario
 int fCompararCiudades(TEntrada e1, TEntrada e2){
 
     int prioridad = 0;
-    int c1, c2;
+    float c1, c2;
 
-    c1 = *(int*)( e1 -> clave );
-    c2 = *(int*)( e2 -> clave );
+    c1 = *(float*)( e1 -> clave );
+    c2 = *(float*)( e2 -> clave );
 
     if(c1 > c2){
         prioridad = -1;
@@ -118,6 +118,8 @@ void ReducirHorasManejo(TColaCP cp){
     TEntrada e_aux;
     TCiudad c, anterior;
 
+    printf("\tREDUCIR HORAS MANEJO:\n\n");
+
     anterior = ubicacionActual;
     distanciaTotal = 0;
     index = 1;
@@ -135,7 +137,7 @@ void ReducirHorasManejo(TColaCP cp){
         fEliminarCiudades(e_aux);
         index++;
     }
-    printf("\n\tDISTANCIA TOTAL RECORRIDA: %d. \n",distanciaTotal);
+    printf("\n\tDISTANCIA TOTAL RECORRIDA: %f \n",distanciaTotal);
 
 }
 
@@ -145,13 +147,13 @@ TColaCP obtenerCiudades(FILE * archivo){
     TEntrada entry;
     TColaCP cp;
 
-    int x, y;
+    float x, y;
     char ciudad[255];
 
     fseek(archivo, 0, SEEK_SET);
 
     cp = crear_cola_cp( &fCompararCiudades );
-    fscanf(archivo,"%d;%d\n",&x,&y);//ubicación actual del usuario
+    fscanf(archivo,"%f;%f\n",&x,&y);//ubicación actual del usuario
     ubicacionActual -> pos_x = x;
     ubicacionActual -> pos_y = y;
 
@@ -159,8 +161,8 @@ TColaCP obtenerCiudades(FILE * archivo){
     while(!feof(archivo)){
 
         fscanf(archivo,"%[^;];", ciudad);
-        fscanf(archivo,"%d;", &x);
-        fscanf(archivo,"%d\n",&y);
+        fscanf(archivo,"%f;", &x);
+        fscanf(archivo,"%f\n",&y);
 
         c = (TCiudad) malloc(sizeof(struct ciudad));
         c->nombre = malloc(sizeof(char)*50);
@@ -170,7 +172,7 @@ TColaCP obtenerCiudades(FILE * archivo){
 
         entry = (TEntrada) malloc(sizeof(struct entrada));
         entry -> clave = malloc(sizeof(int));
-        *(int*)entry -> clave = ((x - ubicacionActual->pos_x) + (y - ubicacionActual->pos_y));
+        *(float*)entry -> clave = ((x - ubicacionActual->pos_x) + (y - ubicacionActual->pos_y));
         entry -> valor = c;
 
         cp_insertar(cp,entry);

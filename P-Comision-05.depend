@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1667498628 source:c:\users\laval\desktop\oc-proyecto2022\planificador.c
+1667500307 source:c:\users\laval\desktop\oc-proyecto2022\planificador.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
