@@ -26,17 +26,12 @@ TColaCP crear_cola_cp(int (*f)(TEntrada, TEntrada)){
  *
 */
 void intercambiar_entradas(TNodo nodo1, TNodo nodo2) {
+
     TEntrada temp;
+    temp = nodo1->entrada;
+    nodo1->entrada = nodo2->entrada;
+    nodo2->entrada = temp;
 
-    temp = (TEntrada) malloc(sizeof(struct entrada));
-    temp -> clave = nodo1 -> entrada -> clave;
-    temp -> valor = nodo1 -> entrada -> valor;
-    nodo1 -> entrada -> clave = nodo2 -> entrada -> clave;
-    nodo1 -> entrada -> valor = nodo2 -> entrada -> valor;
-    nodo2 -> entrada->clave = temp->clave;
-    nodo2 -> entrada -> valor = temp -> valor;
-
-    free(temp);
 }
 
 /**
@@ -51,7 +46,7 @@ void ordenar_ascendente(TColaCP cola, TNodo nodo){
 }
 
 /**
- * Busca la ubicación donde se insertará el siguiente nodo, esto es el primer nodo sin hijos libre
+ * Busca la ubicación donde se insertó el último nodo de acuerdo a la cantidad de elementos de la cola
 */
 TNodo buscar_ubicacion(TColaCP cola, int cant_elem) {
     TNodo nodo_actual, nodo_siguiente;
@@ -92,9 +87,7 @@ TNodo inicializar_nodo(TNodo nuevo_nodo, TEntrada entrada) {
 int cp_insertar(TColaCP cola, TEntrada entr){
 
     int inserte;
-    int p, cant_elem;
-    TNodo nuevo_nodo, nodo_actual, nodo_aux;
-    TEntrada entrada_actual;
+    TNodo nuevo_nodo, nodo_actual;
 
     inserte = FALSE;
 
@@ -129,7 +122,6 @@ int cp_insertar(TColaCP cola, TEntrada entr){
 TEntrada copiar_entrada(TNodo nodo_original) {
 
     TEntrada toRet;
-
     toRet = (TEntrada) malloc(sizeof(struct entrada));
     toRet -> clave = (nodo_original -> entrada -> clave);
     toRet -> valor = (nodo_original -> entrada -> valor);
@@ -191,8 +183,8 @@ TEntrada cp_eliminar(TColaCP cola){
         free(nodo_eliminar);
         cola -> cantidad_elementos--;
         ordenar_luego_de_eliminar(cola, cola -> raiz);
-        return toRet;
     }
+    return toRet;
 
 }
 

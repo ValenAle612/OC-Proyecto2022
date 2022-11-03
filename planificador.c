@@ -14,7 +14,6 @@ typedef struct ciudad {
     float pos_y;
 } * TCiudad;
 
-//TColaCP cp;//colacp global
 TCiudad ubicacionActual;//ubicacion actual del usuario
 
 
@@ -115,7 +114,7 @@ void ReducirHorasManejo(cp){
 
     anterior = ubicacionActual;
     distanciaTotal = 0;
-    index = 0;
+    index = 1;
 
     while(cp_cantidad(cp) > 0){
 
@@ -146,8 +145,6 @@ TColaCP obtenerCiudades(FILE * archivo){
     fseek(archivo, 0, SEEK_SET);
     cp = crear_cola_cp( &fCompararCiudades );
     fscanf(archivo,"%d;%d\n",&x,&y);//ubicación actual del usuario
-
-    //ubicacionActual = malloc(sizeof(struct ciudad));
     ubicacionActual -> pos_x = x;
     ubicacionActual -> pos_y = y;
 
@@ -179,22 +176,6 @@ int planificador(FILE *archivo){
 
     TColaCP cola;
     int opcion;
-    //char * ruta_archivo;
-    //FILE * archivo; //ubicación actual del usuario
-    /*
-    if(argc!=2){
-        printf("ERROR: Cantidad de argumentos equivocado");
-        return ERROR_INVOCACION_PROGRAMA;
-    }*/
-
-    //ruta_archivo = argv[1];
-
-    //archivo = fopen(ruta_archivo,"r");
-    /*
-    if(archivo == NULL){
-        printf("ERROR: Archivo no encontrado");
-        return ERROR_APERTURA_ARCHIVO;
-    }*/
 
     printf("Archivo leido\n\n");
     ubicacionActual = malloc(sizeof(struct ciudad)); //agregado desp
